@@ -1,0 +1,8 @@
+development:
+  adapter: postgresql
+  database: textme_development
+
+
+test:
+  adapter: postgresql
+  database: textme_test

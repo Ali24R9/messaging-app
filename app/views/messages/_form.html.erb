@@ -1,0 +1,25 @@
+<%= form_for @message do |f| %>
+  <% if @message.errors.any? %>
+    <div class="error_messages">
+      <h2 class="error">Form is invalid</h2>
+      <ul>
+        <% @message.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+    <% end %>
+      <div class="form group">
+        <%= f.label :to %>
+        <%= f.text_field :to %>
+      </div>
+      <div class="form group">
+        <%= f.label :from %>
+        <%= f.text_field :from %>
+      </div>
+      <div class="form group">
+        <%= f.label :body %>
+        <%= f.text_field :body %>
+      </div>
+      <%= f.submit %>
+    <% end %>
