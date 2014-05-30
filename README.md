@@ -1,61 +1,30 @@
-#API Practice
+Texting apps
+Build an app that lets users send text messages to their friends. This will be a two-day project.
 
-##twilio application with environmental variables.
+#This project was done at epicodus while learning how to use API's
 
+#User Stories:
 
+As a user, I want to send a text message to a phone number, so that I can send texts from the web. Hint: Follow along with the lesson.
+As a user, I want to save contacts to an address book, so that it's easy to text them again without re-typing their phone number.
+As a user, I want to send a message to more than one person at once, so that I can mass text my friends.
+As a user, I want to send pictures in my messages, so that I can share photos and cute cat pics with my friends. Hint: Check the Twilio API docs.
+As a user who receives a text message, if I text back, I want to get an automated response telling me that the phone number can't receive texts, so that I don't get sad when the sender doesn't reply. Hint: This will be a bit hard, and I don't expect you to necessarily finish this. Here are some pointers:
+When Twilio receives a text message to one of your phone numbers, it will make callback, or webhook, which just means an HTTP request from the API to your server. On Heroku, this is easy, but to work on your development machine, you'll need a "tunnel" that Twilio can reach your computer through. One nice, free option is localtunnel.me. Set that up first.
 
-Use REST client to make HTTP requests.
+On your Twilio numbers page, choose your phone number, then change the messaging request URL to your localtunnel address followed by an endpoint that Twilio can POST to when it receives a test, e.g. http://j384.localtunnel.me/inbound_messages.
 
-Example request:
+Create a route and controller for creating inbound messages. Make a PORO model that can take a phone number and text the automated response back to it. When the inbound text is received, it will take the request, pass the phone number of the sender to the model, and the model then sends the automated response back.
 
-response = RestClient.post(
-  'https://AC3e0af22b6b772460f352ba8c6586fbde:e04f17e88eb7b8c81feb1b951dcd7a2f@api.twilio.com/2010-04-01/Accounts/AC3e0af22b6b772460f352ba8c6586fbde/Messages.json',
-  :Body => 'Hello world!',
-  :To => '5038629187',
-  :From => '5039463641'
-)
-Alternate, easier-to-understand syntax:
+When writing integration tests, you can simulate Twilio's request to your app by doing something like this:
 
-response = RestClient::Request.new(
-  :method => :post,
-  :url => 'https://api.twilio.com/2010-04-01/Accounts/AC3e0af22b6b772460f352ba8c6586fbde/Messages.json',
-  :user => 'AC3e0af22b6b772460f352ba8c6586fbde',
-  :password => 'e04f17e88eb7b8c81feb1b951dcd7a2f',
-  :payload => { :Body => 'Hello world!',
-                :To => '5038629187',
-                :From => '5039463641' }
-).execute
-
-Turn the response into hashes and arrays:
-
-```ruby
-parsed_response = JSON.parse(response)
-Take sensitive info out of your app and replace it with environmental variables:
-
-ENV['TWILIO_ACCOUNT_SID']
-Set the environmental variables in a .env file:
-
-TWILIO_ACCOUNT_SID=AC3e0af22b6b772460f352ba8c6586fbde
-and on Heroku:
-
-$ heroku config:set TWILIO_ACCOUNT_SID=AC3e0af22b6b772460f352ba8c6586fbde
-Add the dotenv-rails' to your test and development groups in your Gemfile.
-
-For testing, add vcr and webmock to your test group in your Gemfile, and these lines to your spec_helper:
-
-spec/spec_helper.rb
-VCR.configure do |c|
-  c.cassette_library_dir = 'spec/cassettes'
-  c.hook_into :webmock
-  c.configure_rspec_metadata!
-  c.filter_sensitive_data('<twilio account sid>') { ENV['TWILIO_ACCOUNT_SID'] } # example for filtering data
+describe "inbound text message" do
+  it "does something..." do
+    RestClient.post #make a request to your app as if you were Twilio
+  end
 end
-Enable VCR for a group of specs:
+If you have trouble receiving callbacksfrom Twilio, make sure to check out the Twilio logs.
 
-describe Message, :vcr => true do
-...
-or a particular spec:
+Phew!
 
-it 'adds an error if the to number is invalid', :vcr => true do
-...
-
+As a user who receives a text message, if I text back, I want my message to be delivered to everyone else in my group. Hint: Buy a unique phone number for each group that is created, so that you can associate messages sent and received at that number with a particular group.
