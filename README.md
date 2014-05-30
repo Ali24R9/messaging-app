@@ -1,9 +1,8 @@
-Texting apps
-Build an app that lets users send text messages to their friends. This will be a two-day project.
 
 #This project was done at epicodus while learning how to use API's
 
 #User Stories:
+An app that lets users send text messages to their friends.
 
 As a user, I want to send a text message to a phone number, so that I can send texts from the web. Hint: Follow along with the lesson.
 As a user, I want to save contacts to an address book, so that it's easy to text them again without re-typing their phone number.
